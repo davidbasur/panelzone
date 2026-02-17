@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Panel Site</title>
+    <title>Sorgu Paneli Siteleri</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -43,21 +43,22 @@
 
         .panels-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             margin-bottom: 40px;
         }
 
         .panel {
             background: white;
             border-radius: 20px;
-            padding: 40px;
+            padding: 35px 25px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             overflow: hidden;
             position: relative;
+            text-align: center;
         }
 
         .panel::before {
@@ -80,35 +81,22 @@
             left: 100%;
         }
 
-        .panel-icon {
-            font-size: 50px;
-            margin-bottom: 20px;
-            display: inline-block;
-        }
-
         .panel-title {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 600;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .panel-description {
-            font-size: 16px;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 30px;
+            color: #000;
+            margin-bottom: 25px;
         }
 
         .youtube-btn {
             display: inline-block;
-            padding: 14px 35px;
+            padding: 12px 32px;
             background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
             color: white;
             text-decoration: none;
             border-radius: 50px;
             font-weight: 600;
-            font-size: 16px;
+            font-size: 15px;
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
@@ -142,45 +130,26 @@
         }
 
         /* Panel Renkler */
-        .panel-1 {
-            border-top: 4px solid #667eea;
-        }
-
-        .panel-1 .panel-title {
-            color: #667eea;
-        }
-
-        .panel-2 {
-            border-top: 4px solid #f093fb;
-        }
-
-        .panel-2 .panel-title {
-            color: #f093fb;
-        }
-
-        .panel-3 {
-            border-top: 4px solid #4facfe;
-        }
-
-        .panel-3 .panel-title {
-            color: #4facfe;
-        }
-
-        .panel-4 {
-            border-top: 4px solid #43e97b;
-        }
-
-        .panel-4 .panel-title {
-            color: #43e97b;
-        }
-
-        .panel-5 {
-            border-top: 4px solid #fa709a;
-        }
-
-        .panel-5 .panel-title {
-            color: #fa709a;
-        }
+        .panel-1 { border-top: 4px solid #667eea; }
+        .panel-2 { border-top: 4px solid #f093fb; }
+        .panel-3 { border-top: 4px solid #4facfe; }
+        .panel-4 { border-top: 4px solid #43e97b; }
+        .panel-5 { border-top: 4px solid #fa709a; }
+        .panel-6 { border-top: 4px solid #ffa500; }
+        .panel-7 { border-top: 4px solid #ff6b6b; }
+        .panel-8 { border-top: 4px solid #4ecdc4; }
+        .panel-9 { border-top: 4px solid #95e1d3; }
+        .panel-10 { border-top: 4px solid #f38181; }
+        .panel-11 { border-top: 4px solid #aa96da; }
+        .panel-12 { border-top: 4px solid #fcbad3; }
+        .panel-13 { border-top: 4px solid #a8edea; }
+        .panel-14 { border-top: 4px solid #fed6e3; }
+        .panel-15 { border-top: 4px solid #74b9ff; }
+        .panel-16 { border-top: 4px solid #81ecec; }
+        .panel-17 { border-top: 4px solid #fab1a0; }
+        .panel-18 { border-top: 4px solid #dfe6e9; }
+        .panel-19 { border-top: 4px solid #fd79a8; }
+        .panel-20 { border-top: 4px solid #fdcb6e; }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -189,12 +158,16 @@
             }
 
             .panels-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
             }
 
             .panel {
-                padding: 30px;
+                padding: 25px 15px;
+            }
+
+            .panel-title {
+                font-size: 18px;
             }
         }
     </style>
@@ -203,49 +176,129 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🎬 YouTube Kanallarını Keşfet</h1>
-            <p>En iyi içerik oluşturucuları takip et ve ilham al</p>
+            <h1>YouTube Kanalları</h1>
+            <p>20 Farklı Kanala Hızlı Erişim</p>
         </div>
 
         <!-- Panels Grid -->
         <div class="panels-grid">
             <!-- Panel 1 -->
             <div class="panel panel-1">
-                <div class="panel-icon">🎵</div>
-                <h2 class="panel-title">Müzik Kanalı</h2>
-                <p class="panel-description">En son müzik trendleri, prodüksiyon teknikleri ve sanatçı röportajları ile dolu bir kanal. Müzik severlerin cenneti!</p>
+                <h2 class="panel-title">Kanal 1</h2>
                 <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
             </div>
 
             <!-- Panel 2 -->
             <div class="panel panel-2">
-                <div class="panel-icon">💻</div>
-                <h2 class="panel-title">Teknoloji Rehberi</h2>
-                <p class="panel-description">Yazılım geliştirme, web tasarım ve yeni teknolojiler hakkında derinlemesine öğretici videolar. Kodlama öğrenin!</p>
+                <h2 class="panel-title">Kanal 2</h2>
                 <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
             </div>
 
             <!-- Panel 3 -->
             <div class="panel panel-3">
-                <div class="panel-icon">🎮</div>
-                <h2 class="panel-title">Gaming Dünyası</h2>
-                <p class="panel-description">Son çıkan oyunların incelemesi, oynanış videoları ve e-sports turnuvaları. Oyun severler için ideal!</p>
+                <h2 class="panel-title">Kanal 3</h2>
                 <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
             </div>
 
             <!-- Panel 4 -->
             <div class="panel panel-4">
-                <div class="panel-icon">🏋️</div>
-                <h2 class="panel-title">Fitness & Sağlık</h2>
-                <p class="panel-description">Egzersiz rutinleri, beslenme tavsiyeleri ve sağlıklı yaşam ipuçları. Fit olmaya başla!</p>
+                <h2 class="panel-title">Kanal 4</h2>
                 <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
             </div>
 
             <!-- Panel 5 -->
             <div class="panel panel-5">
-                <div class="panel-icon">🎨</div>
-                <h2 class="panel-title">Sanat & Tasarım</h2>
-                <p class="panel-description">Dijital sanat, grafik tasarım ve yaratıcı projeler. Sanatsal yeteneklerini geliştir!</p>
+                <h2 class="panel-title">Kanal 5</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 6 -->
+            <div class="panel panel-6">
+                <h2 class="panel-title">Kanal 6</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 7 -->
+            <div class="panel panel-7">
+                <h2 class="panel-title">Kanal 7</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 8 -->
+            <div class="panel panel-8">
+                <h2 class="panel-title">Kanal 8</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 9 -->
+            <div class="panel panel-9">
+                <h2 class="panel-title">Kanal 9</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 10 -->
+            <div class="panel panel-10">
+                <h2 class="panel-title">Kanal 10</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 11 -->
+            <div class="panel panel-11">
+                <h2 class="panel-title">Kanal 11</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 12 -->
+            <div class="panel panel-12">
+                <h2 class="panel-title">Kanal 12</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 13 -->
+            <div class="panel panel-13">
+                <h2 class="panel-title">Kanal 13</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 14 -->
+            <div class="panel panel-14">
+                <h2 class="panel-title">Kanal 14</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 15 -->
+            <div class="panel panel-15">
+                <h2 class="panel-title">Kanal 15</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 16 -->
+            <div class="panel panel-16">
+                <h2 class="panel-title">Kanal 16</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 17 -->
+            <div class="panel panel-17">
+                <h2 class="panel-title">Kanal 17</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 18 -->
+            <div class="panel panel-18">
+                <h2 class="panel-title">Kanal 18</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 19 -->
+            <div class="panel panel-19">
+                <h2 class="panel-title">Kanal 19</h2>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 20 -->
+            <div class="panel panel-20">
+                <h2 class="panel-title">Kanal 20</h2>
                 <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
             </div>
         </div>
