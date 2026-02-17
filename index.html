@@ -1,0 +1,144 @@
+    <div id="profileBox" style="margin-top:10px">
+      <div class="small muted">Kullanıcı: <span id="profileName">—</span></div>
+      <div class="small muted">Hesap türü: <span id="profileType">statik-demo</span></div>
+      <div class="muted-block">Not: Bu demo tamamen tarayıcıda çalışır. Hesaplar LocalStorage'da saklanır.</div>
+    </div>
+
+    <hr style="border:none;border-top:1px dashed rgba(255,255,255,0.03);margin:12px 0">
+
+    <div>
+      <strong>Gönderi Biçimi (Nortr benzeri JSON)</strong>
+      <pre id="lastJson" style="background:#021124;padding:8px;border-radius:8px;margin-top:8px;color:#9fe7ef;font-size:12px;overflow:auto;max-height:160px">Henüz gönderi yok.</pre>
+    </div>
+  </div>
+
+  <div style="height:12px"></div>
+
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <strong>Hızlı Bilgi</strong>
+      <div class="tiny">Feb 17, 2026</div>
+    </div>
+    <div class="muted-block" style="margin-top:10px">
+      - Basit CAPTCHA: metin + sürükle doğrulama. <br>
+      - "Sıkı doğrulama": davranış süresi + token kontrolü simüle edilir.
+    </div>
+  </div>
+</aside>
+
+<main>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div><strong>Büyük Duvar</strong><div class="small muted">Tüm gönderiler burada görünecek</div></div>
+      <div class="row">
+        <div class="pill" id="totalCount">0 Gönderi</div>
+        <button class="btn ghost" id="clearBtn">Temizle</button>
+      </div>
+    </div>
+
+    <div style="margin-bottom:12px">
+      <div class="compose">
+        <div class="avatar"></div>
+        <div style="flex:1">
+          <textarea id="postText" placeholder="Ne düşünüyorsun? (maks 280 karakter)"></textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+            <div class="small muted">Karakter: <span id="charCount">0</span>/280</div>
+            <div style="display:flex;gap:8px;align-items:center">
+              <div class="captcha-box" id="composeCaptcha">
+                <button class="btn ghost" id="reloadCaptcha">CAPTCHA Yenile</button>
+                <div class="captcha-token" id="composeCaptchaText">—</div>
+              </div>
+              <button class="btn" id="postBtn">Gönder</button>
+            </div>
+          </div>
+
+          <div class="muted-block" id="composeNote" style="margin-top:8px">Gönderim için CAPTCHA doğrulaması + sıkı davranış kontrolü gereklidir.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wall" id="wall"></div>
+  </div>
+
+  <footer>
+    Yerli & Milli Microwall — Statik demo. Tasarım modern, tek dosya.
+  </footer>
+</main>
+
+  // (devamı)
+  const words = ['dağ','güneş','deniz','bulut','rüzgar','yıldız','umut','kedi','köprü','bahçe'];
+  const w = words[Math.floor(Math.random()*words.length)];
+  const n = Math.floor(Math.random()*900+100);
+  currentCaptcha = w + n;
+  captchaCreatedAt = Date.now();
+  document.getElementById('composeCaptchaText').innerText = currentCaptcha;
+}
+newCaptcha();
+document.getElementById('reloadCaptcha').addEventListener('click', ()=> newCaptcha());
+
+// Karakter sayacı
+const ta = document.getElementById('postText');
+const charCount = document.getElementById('charCount');
+ta.addEventListener('input', ()=>{ charCount.innerText = ta.value.length; if(ta.value.length>280){ charCount.style.color='var(--danger)'; } else charCount.style.color=''; });
+
+// Post butonu
+document.getElementById('postBtn').addEventListener('click', ()=>{
+  const cur = getCurrent();
+  if(!cur){ alert('Önce giriş yapın'); return; }
+  const text = ta.value.trim();
+  if(!text){ alert('Mesaj boş olamaz'); return; }
+  if(text.length > 280){ alert('280 karakteri aşmayın'); return; }
+
+  // CAPTCHA doğrulama (kullanıcıdan token girmesini istemek yerine küçük test)
+  const userToken = prompt('CAPTCHA doğrulama: gösterilen kelimeyi tam olarak yazın: ' + currentCaptcha);
+  if(!userToken || userToken.trim() !== currentCaptcha){
+    alert('CAPTCHA doğrulaması başarısız.');
+    newCaptcha();
+    return;
+  }
+
+  // Sıkı doğrulama: minimum 1.5s - maximum 60s içinde göndermeli (davranış simülasyonu)
+  const elapsed = (Date.now() - captchaCreatedAt)/1000;
+  if(elapsed < 1.5 || elapsed > 60){
+    alert('Davranış doğrulaması başarısız (zaman aralığı).');
+    newCaptcha();
+    return;
+  }
+
+  // token hash kontrol (basit)
+  const tokenHash = simpleHash(currentCaptcha + cur);
+  if(!tokenHash){ alert('Token hatası'); return; }
+
+  // Nortr-benzeri JSON oluştur
+  const nortr = {
+    type: 'note',
+    author: cur,
+    displayName: DB.get('users')[cur].displayName,
+    text: text,
+    ts: new Date().toISOString(),
+    meta: {protocol:'nortr-lite', version:'0.1'}
+  };
+
+  // Kaydet
+  const posts = DB.get('posts') || [];
+  posts.push({id: Date.now() + '-' + Math.floor(Math.random()*9999), author: cur, displayName: DB.get('users')[cur].displayName, text: text, ts: Date.now(), nortrJson: nortr});
+  DB.set('posts', posts);
+
+  // Temizle, yenile captcha ve render
+  ta.value = '';
+  charCount.innerText = '0';
+  newCaptcha();
+  renderWall();
+  alert('Gönderildi (demo).');
+});
+
+// Temizle butonu
+document.getElementById('clearBtn').addEventListener('click', ()=>{
+  if(!confirm('Tüm gönderileri silmek istiyor musunuz? (LocalStorage)')) return;
+  DB.set('posts', []);
+  renderWall();
+});
+
+// Başlangıç render
+renderWall();
+</script>
