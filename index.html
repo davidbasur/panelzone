@@ -1,144 +1,254 @@
-    <div id="profileBox" style="margin-top:10px">
-      <div class="small muted">Kullanıcı: <span id="profileName">—</span></div>
-      <div class="small muted">Hesap türü: <span id="profileType">statik-demo</span></div>
-      <div class="muted-block">Not: Bu demo tamamen tarayıcıda çalışır. Hesaplar LocalStorage'da saklanır.</div>
-    </div>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Panel Site</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <hr style="border:none;border-top:1px dashed rgba(255,255,255,0.03);margin:12px 0">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
 
-    <div>
-      <strong>Gönderi Biçimi (Nortr benzeri JSON)</strong>
-      <pre id="lastJson" style="background:#021124;padding:8px;border-radius:8px;margin-top:8px;color:#9fe7ef;font-size:12px;overflow:auto;max-height:160px">Henüz gönderi yok.</pre>
-    </div>
-  </div>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-  <div style="height:12px"></div>
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+        }
 
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <strong>Hızlı Bilgi</strong>
-      <div class="tiny">Feb 17, 2026</div>
-    </div>
-    <div class="muted-block" style="margin-top:10px">
-      - Basit CAPTCHA: metin + sürükle doğrulama. <br>
-      - "Sıkı doğrulama": davranış süresi + token kontrolü simüle edilir.
-    </div>
-  </div>
-</aside>
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
 
-<main>
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-      <div><strong>Büyük Duvar</strong><div class="small muted">Tüm gönderiler burada görünecek</div></div>
-      <div class="row">
-        <div class="pill" id="totalCount">0 Gönderi</div>
-        <button class="btn ghost" id="clearBtn">Temizle</button>
-      </div>
-    </div>
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
 
-    <div style="margin-bottom:12px">
-      <div class="compose">
-        <div class="avatar"></div>
-        <div style="flex:1">
-          <textarea id="postText" placeholder="Ne düşünüyorsun? (maks 280 karakter)"></textarea>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
-            <div class="small muted">Karakter: <span id="charCount">0</span>/280</div>
-            <div style="display:flex;gap:8px;align-items:center">
-              <div class="captcha-box" id="composeCaptcha">
-                <button class="btn ghost" id="reloadCaptcha">CAPTCHA Yenile</button>
-                <div class="captcha-token" id="composeCaptchaText">—</div>
-              </div>
-              <button class="btn" id="postBtn">Gönder</button>
-            </div>
-          </div>
+        .panels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
 
-          <div class="muted-block" id="composeNote" style="margin-top:8px">Gönderim için CAPTCHA doğrulaması + sıkı davranış kontrolü gereklidir.</div>
+        .panel {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .panel:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.2);
+        }
+
+        .panel:hover::before {
+            left: 100%;
+        }
+
+        .panel-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .panel-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .panel-description {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .youtube-btn {
+            display: inline-block;
+            padding: 14px 35px;
+            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .youtube-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.3s ease;
+        }
+
+        .youtube-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(255, 0, 0, 0.4);
+        }
+
+        .youtube-btn:hover::before {
+            left: 100%;
+        }
+
+        .youtube-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Panel Renkler */
+        .panel-1 {
+            border-top: 4px solid #667eea;
+        }
+
+        .panel-1 .panel-title {
+            color: #667eea;
+        }
+
+        .panel-2 {
+            border-top: 4px solid #f093fb;
+        }
+
+        .panel-2 .panel-title {
+            color: #f093fb;
+        }
+
+        .panel-3 {
+            border-top: 4px solid #4facfe;
+        }
+
+        .panel-3 .panel-title {
+            color: #4facfe;
+        }
+
+        .panel-4 {
+            border-top: 4px solid #43e97b;
+        }
+
+        .panel-4 .panel-title {
+            color: #43e97b;
+        }
+
+        .panel-5 {
+            border-top: 4px solid #fa709a;
+        }
+
+        .panel-5 .panel-title {
+            color: #fa709a;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .panels-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .panel {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎬 YouTube Kanallarını Keşfet</h1>
+            <p>En iyi içerik oluşturucuları takip et ve ilham al</p>
         </div>
-      </div>
+
+        <!-- Panels Grid -->
+        <div class="panels-grid">
+            <!-- Panel 1 -->
+            <div class="panel panel-1">
+                <div class="panel-icon">🎵</div>
+                <h2 class="panel-title">Müzik Kanalı</h2>
+                <p class="panel-description">En son müzik trendleri, prodüksiyon teknikleri ve sanatçı röportajları ile dolu bir kanal. Müzik severlerin cenneti!</p>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 2 -->
+            <div class="panel panel-2">
+                <div class="panel-icon">💻</div>
+                <h2 class="panel-title">Teknoloji Rehberi</h2>
+                <p class="panel-description">Yazılım geliştirme, web tasarım ve yeni teknolojiler hakkında derinlemesine öğretici videolar. Kodlama öğrenin!</p>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 3 -->
+            <div class="panel panel-3">
+                <div class="panel-icon">🎮</div>
+                <h2 class="panel-title">Gaming Dünyası</h2>
+                <p class="panel-description">Son çıkan oyunların incelemesi, oynanış videoları ve e-sports turnuvaları. Oyun severler için ideal!</p>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 4 -->
+            <div class="panel panel-4">
+                <div class="panel-icon">🏋️</div>
+                <h2 class="panel-title">Fitness & Sağlık</h2>
+                <p class="panel-description">Egzersiz rutinleri, beslenme tavsiyeleri ve sağlıklı yaşam ipuçları. Fit olmaya başla!</p>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+
+            <!-- Panel 5 -->
+            <div class="panel panel-5">
+                <div class="panel-icon">🎨</div>
+                <h2 class="panel-title">Sanat & Tasarım</h2>
+                <p class="panel-description">Dijital sanat, grafik tasarım ve yaratıcı projeler. Sanatsal yeteneklerini geliştir!</p>
+                <a href="https://www.youtube.com/@youtube" target="_blank" class="youtube-btn">YouTube'u Aç</a>
+            </div>
+        </div>
     </div>
-
-    <div class="wall" id="wall"></div>
-  </div>
-
-  <footer>
-    Yerli & Milli Microwall — Statik demo. Tasarım modern, tek dosya.
-  </footer>
-</main>
-
-  // (devamı)
-  const words = ['dağ','güneş','deniz','bulut','rüzgar','yıldız','umut','kedi','köprü','bahçe'];
-  const w = words[Math.floor(Math.random()*words.length)];
-  const n = Math.floor(Math.random()*900+100);
-  currentCaptcha = w + n;
-  captchaCreatedAt = Date.now();
-  document.getElementById('composeCaptchaText').innerText = currentCaptcha;
-}
-newCaptcha();
-document.getElementById('reloadCaptcha').addEventListener('click', ()=> newCaptcha());
-
-// Karakter sayacı
-const ta = document.getElementById('postText');
-const charCount = document.getElementById('charCount');
-ta.addEventListener('input', ()=>{ charCount.innerText = ta.value.length; if(ta.value.length>280){ charCount.style.color='var(--danger)'; } else charCount.style.color=''; });
-
-// Post butonu
-document.getElementById('postBtn').addEventListener('click', ()=>{
-  const cur = getCurrent();
-  if(!cur){ alert('Önce giriş yapın'); return; }
-  const text = ta.value.trim();
-  if(!text){ alert('Mesaj boş olamaz'); return; }
-  if(text.length > 280){ alert('280 karakteri aşmayın'); return; }
-
-  // CAPTCHA doğrulama (kullanıcıdan token girmesini istemek yerine küçük test)
-  const userToken = prompt('CAPTCHA doğrulama: gösterilen kelimeyi tam olarak yazın: ' + currentCaptcha);
-  if(!userToken || userToken.trim() !== currentCaptcha){
-    alert('CAPTCHA doğrulaması başarısız.');
-    newCaptcha();
-    return;
-  }
-
-  // Sıkı doğrulama: minimum 1.5s - maximum 60s içinde göndermeli (davranış simülasyonu)
-  const elapsed = (Date.now() - captchaCreatedAt)/1000;
-  if(elapsed < 1.5 || elapsed > 60){
-    alert('Davranış doğrulaması başarısız (zaman aralığı).');
-    newCaptcha();
-    return;
-  }
-
-  // token hash kontrol (basit)
-  const tokenHash = simpleHash(currentCaptcha + cur);
-  if(!tokenHash){ alert('Token hatası'); return; }
-
-  // Nortr-benzeri JSON oluştur
-  const nortr = {
-    type: 'note',
-    author: cur,
-    displayName: DB.get('users')[cur].displayName,
-    text: text,
-    ts: new Date().toISOString(),
-    meta: {protocol:'nortr-lite', version:'0.1'}
-  };
-
-  // Kaydet
-  const posts = DB.get('posts') || [];
-  posts.push({id: Date.now() + '-' + Math.floor(Math.random()*9999), author: cur, displayName: DB.get('users')[cur].displayName, text: text, ts: Date.now(), nortrJson: nortr});
-  DB.set('posts', posts);
-
-  // Temizle, yenile captcha ve render
-  ta.value = '';
-  charCount.innerText = '0';
-  newCaptcha();
-  renderWall();
-  alert('Gönderildi (demo).');
-});
-
-// Temizle butonu
-document.getElementById('clearBtn').addEventListener('click', ()=>{
-  if(!confirm('Tüm gönderileri silmek istiyor musunuz? (LocalStorage)')) return;
-  DB.set('posts', []);
-  renderWall();
-});
-
-// Başlangıç render
-renderWall();
-</script>
+</body>
+</html>
